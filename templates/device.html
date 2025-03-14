@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Устройство {{ device.device_name }}</title>
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            Отказано в доступе!
+        </div>
+    {% else %}
+        {% if 'can view device information' in permissions %}
+            <h3>Описание: {{ device.description }}</h3>
+            {% for msg in device_msg %}
+                <p>{{ msg }}</p>
+            {% endfor %}
+        {% endif %}
+        {% if 'can send device information' in permissions %}
+            <form method="post" action="{% url "send_to_device" %}">
+                {% csrf_token %}
+                <label for="iot-input">send to device {{ device.device_name }}</label>
+                <input class="input-sm" id="iot-input" name="device_message">
+                <input class="input-sm" id="iot-input" name="device" hidden="hidden" value="{{ device.uid }}">
+                <button type="submit">Отправить</button>
+            </form>
+        {% endif %}
+        {#{% if 'can disable device' in permissions %}#}
+        {#    <form method="post" action="{% url "send_to_device" %}">#}
+        {#        <button type="submit">Отключить устройство</button>#}
+        {#    </form>#}
+        {#{% endif %}#}
+    {% endif %}
+{% endblock %}

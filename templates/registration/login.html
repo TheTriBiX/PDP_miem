@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container-fluid">
+    <form method="post" action="{% url "register_confirm" %}">
+        {% csrf_token %}
+        <div class="btn-group-vertical">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                {{ form.password }}
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">2FA Code</label>
+                {{ form.otp_token }}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    </div>
+    <div class="link-info">
+            <a href="{% url "register" %}">Регистрация</a>
+    </div>
+{% endblock %}
