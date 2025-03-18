@@ -7,7 +7,8 @@ from group_police.views import RegisterView, create_user, confirm_register, IoTD
     IoTDevicesAPIView, logout_user
 
 urlpatterns = [
-    path('admin/', admin_site.urls),
+    path('admin_2fa/', admin_site.urls),
+    path('admin/', admin.site.urls),
     path('register/', RegisterView.as_view(), name='register'),
     path('api/register/', create_user, name='create_user'),
     path('login/', login, name='login'),
