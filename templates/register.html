@@ -1,26 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Register</h2>
+    <h2>Регистрация</h2>
     {% if user_exist %}
         <div class="alert alert-danger" role="alert">
             Пользователь с таким именем уже существует!
         </div>
     {% endif %}
+    <div class="btn-group-vertical">
     <form action="{% url 'create_user' %}" method="post">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Username</label>
+            <label for="exampleInputEmail1" class="form-label">Имя пользователя</label>
             <input type="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                    name="username">
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <label for="exampleInputPassword1" class="form-label">Пароль</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="password">
         </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <button type="submit" class="btn btn-primary">Подтвердить</button>
     </form>
+    </div>
 {% endblock content %}

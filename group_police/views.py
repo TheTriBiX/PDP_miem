@@ -16,7 +16,7 @@ from django_tables2 import SingleTableView
 
 from group_police.models import IoTDevice, IoTUser, IoTMessage, AccessPolicy, UserToDeviceLog
 from group_police.tables import DeviceTable
-from mqtt_broker.devices import MQTT_LISTENER
+# from mqtt_broker.devices import MQTT_LISTENER
 
 
 def create_user(request, **kwargs):
@@ -92,7 +92,7 @@ class IoTDeviceView(LoginRequiredMixin, View):
                     device=device,
                 ).order_by(
                     'receive_time',
-                )[:5:]
+                )
             }
             return render(request, 'device.html', context)
         else:
@@ -100,24 +100,24 @@ class IoTDeviceView(LoginRequiredMixin, View):
             return render(request, 'device.html', context)
 
 
-class IoTDevicesAPIView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        msg = request.POST.get('device_message')
-        device = IoTDevice.objects.get(uid=request.POST.get('device'))
-        topic = f'/devices/{device.device_name}/data'
-        try:
-            MQTT_LISTENER.send_message(topic, msg)
-            UserToDeviceLog.objects.create(
-                user=request.user,
-                device=device,
-                status='Успешная отправка',
-                description=f'successful send. msg: [{msg}] from user: [{request.user}] to device: [{device.device_name}]'
-            )
-        except Exception as e:
-            UserToDeviceLog.objects.create(
-                user=request.user,
-                device=device,
-                status='Неудачная отправка',
-                description=f'unsuccessful send. msg: [{msg}] from user: [{request.user}] to device: [{device.device_name}]\n reason: [{e}]'
-            )
-        return redirect(reverse("device", kwargs={'pk': device.id}))
+# class IoTDevicesAPIView(LoginRequiredMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         msg = request.POST.get('device_message')
+#         device = IoTDevice.objects.get(uid=request.POST.get('device'))
+#         topic = f'/devices/{device.device_name}/data'
+#         try:
+#             MQTT_LISTENER.send_message(topic, msg)
+#             UserToDeviceLog.objects.create(
+#                 user=request.user,
+#                 device=device,
+#                 status='Успешная отправка',
+#                 description=f'successful send. msg: [{msg}] from user: [{request.user}] to device: [{device.device_name}]'
+#             )
+#         except Exception as e:
+#             UserToDeviceLog.objects.create(
+#                 user=request.user,
+#                 device=device,
+#                 status='Неудачная отправка',
+#                 description=f'unsuccessful send. msg: [{msg}] from user: [{request.user}] to device: [{device.device_name}]\n reason: [{e}]'
+#             )
+#         return redirect(reverse("device", kwargs={'pk': device.id}))

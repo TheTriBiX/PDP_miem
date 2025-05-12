@@ -5,18 +5,18 @@
         {% csrf_token %}
         <div class="btn-group-vertical">
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Username</label>
+                <label for="exampleInputEmail1" class="form-label">Имя пользователя</label>
                 {{ form.username }}
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <label for="exampleInputPassword1" class="form-label">Пароль</label>
                 {{ form.password }}
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">2FA Code</label>
+                <label for="exampleInputPassword1" class="form-label">2FA код</label>
                 {{ form.otp_token }}
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Подтвердить</button>
         </div>
     </form>
     </div>

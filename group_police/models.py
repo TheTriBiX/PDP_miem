@@ -20,6 +20,21 @@ class IoTUser(AbstractUser):
     allowed_iot_groups = models.ManyToManyField('IoTGroup')
 
 
+class RBACPolicy(models.Model):
+    name = models.CharField(max_length=64, verbose_name='Имя', db_comment='Имя политики')
+    description = models.CharField(max_length=64, verbose_name='Описание', db_comment='Описание политики')
+    action = models.CharField(choices=[('A', 'ALLOW'), ('D', 'DROP'), ('R', 'REDIRECT')],
+                              verbose_name="Действие над запросом", max_length=1)
+    hosts = models.TextField(verbose_name="Запросы от адресов")
+    redirect_hosts = models.TextField(verbose_name="Перенаправлять на адреса")
+    iot_groups = models.ManyToManyField('IoTGroup', verbose_name='Группы IoT-устройств')
+
+    class Meta:
+        db_table = 'RBACPolicy'
+        verbose_name = 'Групповая политика'
+        verbose_name_plural = 'Групповые политики'
+
+
 class AccessPolicy(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -74,8 +89,14 @@ class IoTGroup(models.Model):
     name = models.TextField()
     description = models.TextField()
 
+    class Meta:
+        # db_table = 'RBACPolicy'
+        verbose_name = 'Группы IoT-устройств'
+        verbose_name_plural = 'Группы IoT-устройств'
+
     def __str__(self):
         return self.name
+
 
 
 class IoTDevice(models.Model):
@@ -88,11 +109,8 @@ class IoTDevice(models.Model):
     description = models.TextField(null=True, default=None)
 
     class Meta:
-        permissions = [
-            ('can_view_device_information', 'can view device information'),
-            ('can_send_device_information', 'can send device information'),
-            ('can_disable_device', 'can disable device'),
-        ]
+        verbose_name = 'IoT-устройство'
+        verbose_name_plural = 'IoT-устройства'
 
     def __str__(self):
         return f'{self.device_name} [{self.device_type}]'
@@ -103,11 +121,20 @@ class UserLog(models.Model):
     user = models.ForeignKey('IoTUser', on_delete=models.DO_NOTHING)
     description = models.TextField()
 
+    class Meta:
+        verbose_name = 'События сгенерированные изменением групповых политик'
+        verbose_name_plural = 'События сгенерированные изменением групповых политик'
+
 
 class IoTDeviceLog(models.Model):
     status = models.CharField(max_length=16, db_index=True)
     device = models.ForeignKey('IoTDevice', on_delete=models.DO_NOTHING)
     description = models.TextField()
+
+    class Meta:
+        # db_table = 'RBACPolicy'
+        verbose_name = 'События сгенерированные IoT-устройствами'
+        verbose_name_plural = 'События сгенерированные IoT-устройствами'
 
 
 class UserToDeviceLog(models.Model):
@@ -116,6 +143,10 @@ class UserToDeviceLog(models.Model):
     user = models.ForeignKey('IoTUser', on_delete=models.DO_NOTHING)
     at_time = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
+
+    class Meta:
+        verbose_name = 'События сгенерированные изменением групп IoT-устройств'
+        verbose_name_plural = 'События сгенерированные изменением групп IoT-устройств'
 
 
 class IoTMessage(models.Model):

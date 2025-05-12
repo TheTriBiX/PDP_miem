@@ -4,7 +4,7 @@ from django_otp.views import login
 
 from group_police.admin import admin_site
 from group_police.views import RegisterView, create_user, confirm_register, IoTDeviceView, IoTDeviceListView, \
-    IoTDevicesAPIView, logout_user
+    logout_user
 
 urlpatterns = [
     path('admin_2fa/', admin_site.urls),
@@ -17,5 +17,5 @@ urlpatterns = [
     path('devices/', IoTDeviceListView.as_view(), name='device_list'),
     path('devices/<int:pk>/', IoTDeviceView.as_view(), name='device'),
     path('devices/<int:pk>/', IoTDeviceView.as_view(), name='device'),
-    path('api/send_to_device/', IoTDevicesAPIView.as_view(), name='send_to_device'),
+    # path('api/send_to_device/', IoTDevicesAPIView.as_view(), name='send_to_device'),
 ]

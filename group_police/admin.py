@@ -4,7 +4,8 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from django_otp.plugins.otp_totp.admin import TOTPDeviceAdmin
 from django.contrib.auth.models import Group
 
-from group_police.models import IoTUser, AccessPolicy, IoTDevice, IoTGroup, UserLog, IoTDeviceLog, UserToDeviceLog
+from group_police.models import IoTUser, AccessPolicy, IoTDevice, IoTGroup, UserLog, IoTDeviceLog, UserToDeviceLog, \
+    RBACPolicy
 
 
 class OTPAdmin(OTPAdminSite):
@@ -33,10 +34,13 @@ class IoTDeviceLogAdmin(admin.ModelAdmin):
         ordering = ('status', 'device',)
 
 admin_site = OTPAdmin(name='OTPAdmin')
-admin_site.register(Group)
-admin_site.register(TOTPDevice, TOTPDeviceAdmin)
+
+# admin_site.register(Group)
+admin_site.register(RBACPolicy)
+# admin_site.register(TOTPDevice, TOTPDeviceAdmin)
 admin_site.register(IoTUser)
-admin_site.register(AccessPolicy)
+admin.register(IoTUser)
+# admin_site.register(AccessPolicy)
 admin_site.register(IoTGroup)
 admin_site.register(IoTDevice)
 admin_site.register(UserLog, UserLogAdmin)
